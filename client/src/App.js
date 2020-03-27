@@ -3,10 +3,13 @@ import { Route } from "react-router-dom";
 import SavedList from "./Movies/SavedList";
 import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
-import axios from 'axios';
+import UpdateMovieForm from "./Movies/UpdateMovieForm";
+import axios from "axios";
 
 const App = () => {
+  // on the top of the screen
   const [savedList, setSavedList] = useState([]);
+  // main state that i actually care about
   const [movieList, setMovieList] = useState([]);
 
   const getMovieList = () => {
@@ -21,7 +24,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    getMovieList();
+    getMovieList(); //defined above
   }, []);
 
   return (
@@ -34,6 +37,10 @@ const App = () => {
 
       <Route path="/movies/:id">
         <Movie addToSavedList={addToSavedList} />
+      </Route>
+
+      <Route path="/update-movie/:id">
+        <UpdateMovieForm />
       </Route>
     </>
   );
