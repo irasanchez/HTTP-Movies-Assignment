@@ -5,6 +5,7 @@ import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
 import UpdateMovieForm from "./Movies/UpdateMovieForm";
 import axios from "axios";
+//import { useParams } from "react-router-dom";
 
 const App = () => {
   // on the top of the screen
@@ -12,7 +13,7 @@ const App = () => {
   // main state that i actually care about
   const [movieList, setMovieList] = useState([]);
 
-  const getMovieList = () => {
+  const getMovieData = () => {
     axios
       .get("http://localhost:5000/api/movies")
       .then(res => setMovieList(res.data))
@@ -24,7 +25,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    getMovieList(); //defined above
+    getMovieData(); //defined above
   }, []);
 
   return (
@@ -36,11 +37,11 @@ const App = () => {
       </Route>
 
       <Route path="/movies/:id">
-        <Movie addToSavedList={addToSavedList} />
+        <Movie addToSavedList={addToSavedList} getMovieData={getMovieData} />
       </Route>
 
       <Route path="/update-movie/:id">
-        <UpdateMovieForm />
+        <UpdateMovieForm movies={movieList} getMovieData={getMovieData} />
       </Route>
     </>
   );

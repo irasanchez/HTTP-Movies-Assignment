@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import MovieCard from "./MovieCard";
 
-function Movie({ addToSavedList }) {
+function Movie({ addToSavedList, getMovieData }) {
   const [movie, setMovie] = useState(null);
   const match = useRouteMatch();
   const history = useHistory();
@@ -14,6 +14,19 @@ function Movie({ addToSavedList }) {
       .get(`http://localhost:5000/api/movies/${id}`)
       .then(res => setMovie(res.data))
       .catch(err => console.log(err.response));
+  };
+
+  const deleteMovie = id => {
+    // - When the call comes back successfully, route the user to `/movies` where they will see the updated movie list without the deleted movie
+    axios
+      .delete(`http://localhost:5000/api/movies/${id}`)
+      .then(res => {
+        //after deleting, get updated list
+        getMovieData();
+        // send user to the homepage to see updates
+        history.push("/");
+      })
+      .catch(err => console.log(err));
   };
 
   const saveMovie = () => {
@@ -43,6 +56,9 @@ function Movie({ addToSavedList }) {
       </div>
       {/* - Add a button in the movie component that routes you to your new route with the movie's id as the URL param */}
       <button onClick={routeToUpdateMovieForm}>Update Movie</button>
+      <button onClick={() => deleteMovie(match.params.id)}>
+        DELETE MOVIE 💣
+      </button>
     </div>
   );
 }
